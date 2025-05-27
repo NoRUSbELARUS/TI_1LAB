@@ -85,7 +85,7 @@ document.getElementById("saveFileBtn").addEventListener("click", async () => {
     }
 });
 
-// Улучшенный столбцовый шифр
+// столбцовый шифр
 document.getElementById("encrypt-columnar").addEventListener("click", () => {
     const text = document.getElementById("textArea").value.replace(/[^А-ЯЁа-яё]/g, '');
     const key = document.getElementById("keyInput").value.replace(/[^А-ЯЁа-яё]/g, '');
@@ -93,7 +93,7 @@ document.getElementById("encrypt-columnar").addEventListener("click", () => {
         showNotification("Text and key can only contain russian symbols", "error");
         return;
     }
-    document.getElementById("textArea").value = improvedColumnarEncrypt(text, key);
+    document.getElementById("textArea").value = ColumnarEncrypt(text, key);
     showNotification("Text succesfully encoded(Columnar)", "success");
 });
 
@@ -104,7 +104,7 @@ document.getElementById("decrypt-columnar").addEventListener("click", () => {
         showNotification("Text and key can only contain russian symbols", "error");
         return;
     }
-    document.getElementById("textArea").value = improvedColumnarDecrypt(text, key);
+    document.getElementById("textArea").value = ColumnarDecrypt(text, key);
     showNotification("Text succesfully decoded(Columnar)", "success");
 });
 
@@ -140,15 +140,15 @@ function getColumnOrder(key) {
         .map(item => item.sortedIndex);
 }
 
-function improvedColumnarEncrypt(plainText, key) {
+function ColumnarEncrypt(plainText, key) {
     const columnOrder = getColumnOrder(key);
     const numCols = key.length;
     let table = [];
     let index = 0;
 
-    // Формируем строки переменной длины
+    // Формируем строки
     for (let row = 0; row < numCols && index < plainText.length; row++) {
-        let rowLength = key.length; // Длина строки = номер столбца + 1
+        let rowLength = key.length; 
         table.push(plainText.slice(index, index + rowLength).split(''));
         index += rowLength;
     }
@@ -167,7 +167,7 @@ function improvedColumnarEncrypt(plainText, key) {
     return cipherText;
 }
 
-function improvedColumnarDecrypt(cipherText, key) {
+function ColumnarDecrypt(cipherText, key) {
     const columnOrder = getColumnOrder(key);
     const numCols = key.length;
     let rowLengths = new Array(numCols).fill(0);
